@@ -1,28 +1,38 @@
 import React from 'react';
 //importar connect
-// import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types';
 import Input from '../components/Input';
 import Button from '../components/Button';
 //Importar action
+import { addUser } from '../actions';
+
 
 class Login extends React.Component {
-  // constructor() {
-  //   super();
+    constructor() {
+      super();
 
-  //   this.state = {
-  //     email: '',
-  //     username: '',
-  //   };
+    this.state = {
+      email: '',
+      username: '',
+    };
 
-  //   this.handleChange = this.handleChange.bind(this);
-  // }
+    this.handleChange = this.handleChange.bind(this);
+  }
 
-  // handleChange({ target }) {
-  //   const { name, value } = target;
-  //   this.setState({ [name]: value });
-  // }
+  handleChange({ target }) {
+    const { name, value } = target;
+    this.setState({ [name]: value });
+  }
 
   //Função que chama a action e redireciona para a page Personagens!
+  sendAction = () => {
+    const { redirect, username } = this.state;
+    const {addUserDispatch} = this.props;
+    this.setState(!redirect)
+    addUserDispatch(username)
+
+  }
 
   render() {
     // const { username, password } = this.state;
@@ -56,11 +66,15 @@ class Login extends React.Component {
   }
 }
 
-// Login.propTypes = {
-//   history: PropTypes.shape({
-//     push: PropTypes.func.isRequired,
-//   }).isRequired,
-//   addUser: PropTypes.func.isRequired,
-// };
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+    }).isRequired,
+  addUserDispatch: PropTypes.func.isRequired,
+};
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  addUserDispatch: (payload) => dispatch(addUser(payload)) 
+})
+
+export default connect(null, mapDispatchToProps)(Login);
